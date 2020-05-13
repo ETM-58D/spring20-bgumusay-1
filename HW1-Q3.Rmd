@@ -1,0 +1,46 @@
+---
+title: "HW1 Q3"
+output: html_document
+---
+First we are downloading required packages and importing dataframes to R.
+
+```{r echo=TRUE, results='hide', message=FALSE,warning=FALSE, error=FALSE}
+
+install.packages("data.table", repos = "http://cran.us.r-project.org")
+library(data.table)
+install.packages("dplyr", repos = "http://cran.us.r-project.org")
+library(dplyr)
+
+
+
+film_isimleri <- read.delim("ETM58D_Spring20_HW1_q3_movie_titles.txt", sep = ",",header = FALSE)
+film_datasi <- read.delim("ETM58D_Spring20_HW1_q3_Netflix_data.txt", header = FALSE,sep = "" )
+```
+
+Below code is used to eliminate all zero values which are actually the missing values and to put the median of each column instead of zero in that column.
+
+```{r}
+colnames(film_datasi) <- film_isimleri[,2]
+
+for(i in 1:ncol(film_datasi))
+{
+  
+  film_datasi[,i][film_datasi[,i] == 0]<- median(film_datasi[,i],na.rm=TRUE)
+}
+```
+
+from the larger data with a vector of size 10000 we have, 1000 part is randomly sampled to get rid of the difficulties in operating.
+
+```{r}
+
+film_sample2 <- sample_n(film_datasi,1000)
+```
+
+after calculating the distance of the selected data above, it is transformed into matrix format and then plotted on 2D.
+```{r}
+distfilm <- dist(film_sample2)
+distfilm <- as.matrix(distfilm)
+plot(cmdscale(distfilm, k=2))
+```
+
+In the graph, almost all of the points gathered around zero which means films in this dataset are roughly of the same quality and there are not many films that are much better and worse than the others.

@@ -1,0 +1,232 @@
+---
+title: "HW1 Q1"
+output: html_document
+---
+
+```{r echo=TRUE, error=FALSE, message=FALSE, warning=FALSE, results='hide'}
+
+install.packages("dplyr", repos = "http://cran.us.r-project.org")
+library(dplyr)
+install.packages("proxy", repos = "http://cran.us.r-project.org")
+library(proxy)
+install.packages("data.table", repos = "http://cran.us.r-project.org")
+library(data.table)
+install.packages("ggplot2", repos = "http://cran.us.r-project.org")
+library(ggplot2)
+```
+
+To select the same variables in every time, set.seed is implemented.
+for loop used to create 10 different data sets from D1 to D10.
+
+```{r}
+set.seed(52)
+for(i in 1:10)
+{
+  
+nam <- paste("D", i, sep = "")
+assign(nam,data.frame(replicate(i,runif(1000, min=-1,max=1))))
+
+}
+```
+
+To find the fraction of the distances smaller than 1 to all distances in the related data set Di, below code is used. 
+But all the distances in D1 are smaller than 1, so the fraction will be 1.
+
+```{r}
+colnames(D1)<- 'X1'
+D1$A <- as.numeric(sqrt((D1$X1)^2))
+fractionD1 <- nrow(subset(D1, A <1))/ nrow(D1)  
+```
+
+For the others from D2 to D10, the distances are calculated and the fraction of values smaller than 1 to the all distances are calculated.
+ggplot is used to plot data points only for D2 to D7 on 2D, because the data sets greater than 7 dimensions includes very few number of distances smaller than 1. Lastly, we plot fraction as a function of dimension and see that they are inversely correlated.
+
+```{r}
+D2$A <- as.numeric(sqrt(((D2$X1)^2+(D2$X2)^2)))
+kucuklerD2 <- subset(D2, A <=1)
+buyuklerD2 <- subset(D2, A >1)
+ggplot()+ geom_point(data=buyuklerD2,aes(X1,X2,colour="red") )+geom_point(data = kucuklerD2, aes(X1,X2,colour="blue"))
+fractionD2 <- nrow(subset(D2, A <1))/ nrow(D2)  
+
+D3$A <- as.numeric(sqrt(((D3$X1)^2+(D3$X2)^2)+(D3$X3)^2))
+kucuklerD3 <- subset(D3, A <1)
+buyuklerD3 <- subset(D3, A >=1)
+ggplot()+ geom_point(data=buyuklerD3,aes(X1,X2,colour="red") )+geom_point(data = kucuklerD3, aes(X1,X2,colour="blue"))
+fractionD3 <- nrow(subset(D3, A <1)) / nrow(D3) 
+
+D4$A <- as.numeric(sqrt(((D4$X1)^2+(D4$X2)^2)+(D4$X3)^2+(D4$X4)^2))
+kucuklerD4 <- subset(D4, A <1)
+buyuklerD4 <- subset(D4, A >=1)
+ggplot()+ geom_point(data=buyuklerD4,aes(X1,X2,colour="red") )+geom_point(data = kucuklerD4, aes(X1,X2,colour="blue"))
+fractionD4 <- nrow(subset(D4, A <1)) / nrow(D4)  
+
+D5$A <- as.numeric(sqrt(((D5$X1)^2+(D5$X2)^2)+(D5$X3)^2+(D5$X4)^2+(D5$X5)^2))
+kucuklerD5 <- subset(D5, A <1)
+buyuklerD5 <- subset(D5, A >=1)
+ggplot()+ geom_point(data=buyuklerD5,aes(X1,X2,colour="red") )+geom_point(data = kucuklerD5, aes(X1,X2,colour="blue"))
+fractionD5 <- nrow(subset(D5, A <1)) / nrow(D5) 
+
+D6$A <- as.numeric(sqrt(((D6$X1)^2+(D6$X2)^2)+(D6$X3)^2+(D6$X4)^2+(D6$X5)^2)+(D6$X6)^2)
+kucuklerD6 <- subset(D6, A <1)
+buyuklerD6 <- subset(D6, A >=1)
+ggplot()+ geom_point(data=buyuklerD6,aes(X1,X2,colour="red") )+geom_point(data = kucuklerD6, aes(X1,X2,colour="blue"))
+fractionD6 <- nrow(subset(D6, A <1)) / nrow(D6) 
+
+D7$A <- as.numeric(sqrt(((D7$X1)^2+(D7$X2)^2)+(D7$X3)^2+(D7$X4)^2+(D7$X5)^2)+(D7$X6)^2+(D7$X7)^2)
+kucuklerD7 <- subset(D7, A <1)
+buyuklerD7 <- subset(D7, A >=1)
+ggplot()+ geom_point(data=buyuklerD7,aes(X1,X2,colour="red") )+geom_point(data = kucuklerD7, aes(X1,X2,colour="blue"))
+fractionD7 <- nrow(subset(D7, A <1)) / nrow(D7) 
+
+D8$A <- as.numeric(sqrt(((D8$X1)^2+(D8$X2)^2)+(D8$X3)^2+(D8$X4)^2+(D8$X5)^2)+(D8$X6)^2+(D8$X7)^2+(D8$X8)^2)
+fractionD8 <- nrow(subset(D8, A <1))/ nrow(D8)  
+
+D9$A <- as.numeric(sqrt(((D9$X1)^2+(D9$X2)^2)+(D9$X3)^2+(D9$X4)^2+(D9$X5)^2)+(D9$X6)^2+(D9$X7)^2+(D9$X8)^2,(D9$X9)^2)
+fractionD9 <- nrow(subset(D9, A <1))/ nrow(D9) 
+
+D10$A <- as.numeric(sqrt(((D10$X1)^2+(D10$X2)^2)+(D10$X3)^2+(D10$X4)^2+(D10$X5)^2)+(D10$X6)^2+(D10$X7)^2+(D10$X8)^2,(D10$X9)^2)
+fractionD10 <- nrow(subset(D10, A <1))/ nrow(D10) 
+
+
+fraction <- c(fractionD1,fractionD2,fractionD3,fractionD4,fractionD5,fractionD6,fractionD7,fractionD8,fractionD9,fractionD10) 
+plot(fraction,main="Fraction vs Dimension",ylab="Fraction",xlab="Dimension")
+grid()
+```
+
+
+B
+For 2D, fraction valuse should be equal to the area of a circle having r=1 over the area of square having a=2. From this equation we can estimate pi value 2D.
+For 3d, fraction valuse should be equal to the volume of sphere having r=1 over the volume of a cube having a=2. From this equation we can estimate pi value for 3D. Both of those values are very close to the actual pi and the difference results from using limited number of observations, if we could use infinite number of observations then true values will be much more closer.
+
+```{r}
+pi_estimationD2 <- (fractionD2*4)/1
+print(paste("Esitmation for pi using 2D is",pi_estimationD2))
+pi_estimationD3 <- (fractionD3*8)/(4/3)
+print(paste("Esitmation for pi using 3D is",pi_estimationD3))
+pi_actual <- pi
+print(paste("Actual pi value is",pi_actual))
+```
+
+
+C
+We generate 100 more observations for each one of the D data set. For every new observation, we find the minimum distances to the points in Q1-A. Then, we find the average minimum distance which is directly correlated with dimension.
+
+```{r}
+
+set.seed(52)
+for(i in 1:10)
+{
+  
+  nam <- paste("D", i, sep = "")
+  assign(nam,data.frame(replicate(i,runif(1000, min=-1,max=1))))
+  
+}
+
+for(i in 1:10)
+{
+  
+  nam2 <- paste("E", i, sep = "")
+  assign(nam2,data.frame(replicate(i,runif(100, min=-1,max=1))))
+  nam3<- paste("output",i,sep = "")
+  assign(nam3,matrix(ncol=1, nrow=100,))
+}
+
+
+dist_mat1 <- proxy::dist(E1,D1)
+dist_mat2 <- proxy::dist(E2,D2)
+dist_mat3 <- proxy::dist(E3,D3)
+dist_mat4 <- proxy::dist(E4,D4)
+dist_mat5 <- proxy::dist(E5,D5)
+dist_mat6 <- proxy::dist(E6,D6)
+dist_mat7 <- proxy::dist(E7,D7)
+dist_mat8 <- proxy::dist(E8,D8)
+dist_mat9 <- proxy::dist(E9,D9)
+dist_mat10 <- proxy::dist(E10,D10)
+
+for(i in 1:100)
+{
+  
+output1[i,1] <- min(dist_mat1[i,])
+}
+avgdistance1 <- mean(output1[1,])
+
+
+for(i in 1:100)
+{
+  
+  output2[i,1] <- min(dist_mat2[i,])
+}
+
+avgdistance2 <- mean(output2[1,])
+
+for(i in 1:100)
+{
+  
+  output3[i,1] <- min(dist_mat3[i,])
+}
+
+avgdistance3 <- mean(output3[1,])
+
+
+for(i in 1:100)
+{
+  
+  output4[i,1] <- min(dist_mat4[i,])
+}
+
+avgdistance4 <- mean(output4[1,])
+
+
+for(i in 1:100)
+{
+  
+  output5[i,1] <- min(dist_mat5[i,])
+}
+
+avgdistance5 <- mean(output5[1,])
+
+for(i in 1:100)
+{
+  
+  output6[i,1] <- min(dist_mat6[i,])
+}
+
+avgdistance6 <- mean(output6[1,])
+
+for(i in 1:100)
+{
+  
+  output7[i,1] <- min(dist_mat7[i,])
+}
+
+avgdistance7 <- mean(output7[1,])
+
+for(i in 1:100)
+{
+  
+  output8[i,1] <- min(dist_mat8[i,])
+}
+
+avgdistance8 <- mean(output8[1,])
+
+for(i in 1:100)
+{
+  
+  output9[i,1] <- min(dist_mat9[i,])
+}
+
+avgdistance9 <- mean(output9[1,])
+
+for(i in 1:100)
+{
+  
+  output10[i,1] <- min(dist_mat10[i,])
+}
+avgdistance10 <- mean(output10[1,])
+
+avgdistance <- c(avgdistance1,avgdistance2,avgdistance3,avgdistance4,avgdistance5,avgdistance6,avgdistance7
+                 ,avgdistance8,avgdistance9,avgdistance10)
+
+plot(avgdistance,main="Average Minimum Distance vs Dimension",ylab="Proportion",xlab="Dimension")
+grid()
+```

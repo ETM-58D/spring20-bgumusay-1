@@ -1,0 +1,24 @@
+---
+title: "HW1 Q2"
+output: html_document
+---
+
+First we are downloading required packages and importing dataframes to R.
+
+```{r echo=TRUE, error=FALSE, message=FALSE, warning=FALSE, results='hide'}
+install.packages("readr", repos = "http://cran.us.r-project.org")
+library(readr)
+
+Boston <- read_csv("Boston.csv")
+Boston[,"X1"]<- NULL
+```
+
+From the PCA we can see that we can explain 94% of the all data set by selecting only 9 variables. because of that we select comp.9 which gives us this formula Y=0.254crim+0.383zn+0.627indus+0.275ptratio-0.176dis-0.463rad-0.179tax-0.172lstat
+
+It is seen as the positive variables are city center properties while the negative ones are the concerns related to the outside of the city center.
+
+```{r}
+pcaboston <- princomp(Boston, cor = T)
+summary(pcaboston, loadings = T)
+barplot(pcaboston$scores[,9])
+```
